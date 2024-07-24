@@ -7,7 +7,7 @@ function Menu() {
   console.log(menu);
 
   return (
-    <ul>
+    <ul className="divide-y divide-stone-600 px-2 md:grid md:grid-cols-[1fr_1fr] md:divide-none">
       {menu.map((pizza) => {
         return <MenuItem pizza={pizza} key={pizza.id} />;
       })}

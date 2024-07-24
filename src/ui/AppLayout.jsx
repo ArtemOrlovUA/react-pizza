@@ -9,12 +9,12 @@ function AppLayout() {
   const isLoading = navigation.state === 'loading';
 
   return (
-    <div className="layout">
+    <div className="grid h-screen grid-rows-[auto_1fr_auto] font-sans">
       {isLoading && <Loader />}
 
       <Header />
 
-      <main>
+      <main className="overflow-auto">
         <Outlet />
       </main>
 

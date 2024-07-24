@@ -1,0 +1,29 @@
+import { Link } from 'react-router-dom';
+
+/* eslint-disable react/prop-types */
+function Button({ children, state, to, type = 'primary' }) {
+  const base = `rounded-full border bg-yellow-400 font-semibold uppercase tracking-wide transition-colors hover:bg-yellow-400 hover:text-stone-100 focus:outline-none focus:ring focus:ring-yellow-300 focus:ring-offset-2 disabled:cursor-not-allowed`;
+
+  const styles = {
+    primary: base + ` p-4 lg:p-6`,
+    small: base + ` p-2 `,
+  };
+
+  if (to)
+    return (
+      <Link className={`${styles[type]} mt-10`} to={to}>
+        {children}
+      </Link>
+    );
+
+  return (
+    <button
+      disabled={state === 'loading' || state === 'submitting'}
+      className={styles[type]}
+    >
+      {children}
+    </button>
+  );
+}
+
+export default Button;

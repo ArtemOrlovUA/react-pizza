@@ -13,12 +13,12 @@ function SearchOrder() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="my-2 sm:my-0">
+    <form onSubmit={handleSubmit} className="my-2">
       <input
         value={searchQuery}
         placeholder="Search order number"
         onChange={(e) => setSearchQuery(e.target.value)}
-        className="w-56 rounded-full border border-stone-300 bg-yellow-100 p-2 text-sm transition-all placeholder:text-stone-700 focus:outline-none focus:ring focus:ring-yellow-500 sm:focus:w-72"
+        className="w-56 rounded-full border border-stone-300 bg-yellow-100 p-2 text-sm transition-all placeholder:text-stone-700 focus:outline-none focus:ring focus:ring-yellow-500 custom:focus:w-72"
       ></input>
     </form>
   );

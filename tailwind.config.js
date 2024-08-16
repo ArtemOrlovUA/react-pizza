@@ -10,6 +10,9 @@ export default {
       height: {
         screen: '100dvh',
       },
+      screens: {
+        custom: '370px',
+      },
     },
   },
   plugins: [],

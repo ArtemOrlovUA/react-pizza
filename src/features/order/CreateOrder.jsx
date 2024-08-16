@@ -50,33 +50,42 @@ function CreateOrder() {
   const cart = fakeCart;
 
   return (
-    <div className="mx-auto max-w-3xl text-center">
-      <h2 className="mt-4">Ready to order? Let&apos;s go!</h2>
+    <div className="mx-auto max-w-3xl text-center md:text-xl">
+      <h2 className="mb-4 mt-8 text-xl font-semibold">
+        Ready to order? Let&apos;s go!
+      </h2>
 
       <Form method="POST">
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
           <label className="">First Name</label>
           <div>
-            <input className="input" type="text" name="customer" required />
+            <input
+              className="input hover:w-92 w-54 transition-all"
+              type="text"
+              name="customer"
+              required
+            />
           </div>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
           <label className="">Phone number</label>
           <div>
             <input className="input" type="tel" name="phone" required />
           </div>
-          {formErrors?.phone && <p>{formErrors.phone}</p>}
+          {formErrors?.phone && (
+            <p className="rounded-md bg-red-400">{formErrors.phone}</p>
+          )}
         </div>
 
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
           <label className="">Address</label>
           <div>
             <input className="input" type="text" name="address" required />
           </div>
         </div>
 
-        <div className="mb-4 flex items-center justify-center space-x-2">
+        <div className="mb-4 ml-2.5 flex items-center justify-center space-x-2 sm:ml-0">
           <input
             className="h-6 w-6 accent-yellow-400 focus:outline-none focus:ring focus:ring-yellow-400"
             type="checkbox"
@@ -90,14 +99,14 @@ function CreateOrder() {
           </label>
         </div>
 
-        <div className="">
+        <div className="mb-4">
           <input
             className=""
             type="hidden"
             name="cart"
             value={JSON.stringify(cart)}
           ></input>
-          <Button state={state}>
+          <Button type="primary" state={state}>
             {isSubmitting ? 'Submitting...' : 'Order now!'}
           </Button>
         </div>

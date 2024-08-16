@@ -2,7 +2,12 @@
 
 import { useLoaderData } from 'react-router-dom';
 import { getOrder } from '../../services/apiRestaurant';
-import { calcMinutesLeft, formatCurrency, formatDate } from '../../utils/helpers';
+import {
+  calcMinutesLeft,
+  formatCurrency,
+  formatDate,
+} from '../../utils/helpers';
+import CartItem from '../../ui/PizzaItem';
 
 const order = {
   id: 'ABCDEF',
@@ -44,33 +49,79 @@ function Order() {
   const order = useLoaderData();
   console.log(order);
 
-  const { id, status, priority, priorityPrice, orderPrice, estimatedDelivery, cart } = order;
+  const {
+    id,
+    status,
+    priority,
+    priorityPrice,
+    orderPrice,
+    estimatedDelivery,
+    cart,
+  } = order;
   const deliveryIn = calcMinutesLeft(estimatedDelivery);
 
   return (
-    <div>
-      <div>
-        <h2>Status</h2>
+    <div className="ml-4 mt-4 sm:text-xl">
+      <div className="mr-4 flex flex-col items-start justify-between rounded-md bg-gray-200 p-2 md:flex-row">
+        <h2 className="font-semibold">Status of order: #{id}</h2>
 
-        <div>
-          {priority && <span>Priority</span>}
-          <span>{status} order</span>
+        <div className="mr-4 flex gap-2">
+          {priority && (
+            <div className="flex items-center">
+              <span className="rounded-md bg-yellow-400 p-1 text-white">
+                Priority
+              </span>
+            </div>
+          )}
+
+          <span className="rounded-md bg-green-400 p-1 text-white">
+            <span className="capitalize">{status}</span> order
+          </span>
         </div>
       </div>
 
-      <div>
+      <div className="mr-4 mt-4 rounded-md bg-gray-200 p-2">
+        {cart.map((item) => (
+          <CartItem key={item.pizzaId} item={item} type="order" />
+        ))}
+      </div>
+
+      <div className="mr-4 mt-4 rounded-md bg-gray-200 p-2 min-[850px]:flex min-[850px]:items-center min-[850px]:justify-between">
         <p>
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😃`
             : 'Order should have arrived'}
         </p>
-        <p>(Estimated delivery: {formatDate(estimatedDelivery)})</p>
+        <p>
+          (Estimated delivery:{' '}
+          <span className="font-semibold">
+            {formatDate(estimatedDelivery)}){' '}
+          </span>
+        </p>
       </div>
 
-      <div>
-        <p>Price pizza: {formatCurrency(orderPrice)}</p>
-        {priority && <p>Price priority: {formatCurrency(priorityPrice)}</p>}
-        <p>To pay on delivery: {formatCurrency(orderPrice + priorityPrice)}</p>
+      <div className="mr-4 mt-4 rounded-md bg-gray-200 p-2">
+        <p>
+          Price pizza:
+          <span className="font-semibold"> {formatCurrency(orderPrice)} </span>
+        </p>
+        {priority && (
+          <p>
+            Price priority:{' '}
+            <span className="font-semibold">
+              {formatCurrency(priorityPrice)}
+            </span>
+          </p>
+        )}
+      </div>
+      <div className="mr-4 mt-4 rounded-md bg-gray-200 p-2">
+        <p className="">
+          To pay on delivery:{' '}
+          <span className="font-semibold">
+            {' '}
+            {formatCurrency(orderPrice + priorityPrice)}
+          </span>{' '}
+        </p>
       </div>
     </div>
   );

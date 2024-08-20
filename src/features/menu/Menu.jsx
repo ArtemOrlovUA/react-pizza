@@ -4,10 +4,10 @@ import MenuItem from './MenuItem';
 
 function Menu() {
   const menu = useLoaderData();
-  console.log(menu);
+  // console.log(menu);
 
   return (
-    <ul className="divide-y divide-stone-600 px-2 md:grid md:grid-cols-[1fr_1fr] md:divide-none">
+    <ul className="max-w-[360px] pl-1 sm:max-w-[100%] md:grid md:grid-cols-[1fr_1fr]">
       {menu.map((pizza) => {
         return <MenuItem pizza={pizza} key={pizza.id} />;
       })}

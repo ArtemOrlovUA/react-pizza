@@ -1,36 +1,19 @@
-import { Link } from 'react-router-dom';
 import LinkButton from '../../ui/LinkButton';
 import Button from '../../ui/Button';
-import CartItem from '../../ui/PizzaItem';
-import { useSelector } from 'react-redux';
-
-const fakeCart = [
-  {
-    pizzaId: 12,
-    name: 'Mediterranean',
-    quantity: 2,
-    unitPrice: 16,
-    totalPrice: 32,
-  },
-  {
-    pizzaId: 6,
-    name: 'Vegetale',
-    quantity: 1,
-    unitPrice: 13,
-    totalPrice: 13,
-  },
-  {
-    pizzaId: 11,
-    name: 'Spinach and Mushroom',
-    quantity: 1,
-    unitPrice: 15,
-    totalPrice: 15,
-  },
-];
+import CartItem from '../../ui/CartItem';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearCart, getCart } from './cartSlice';
 
 function Cart() {
   const username = useSelector((state) => state.user.username);
-  const cart = fakeCart;
+  // const cart = fakeCart;
+  const cart = useSelector(getCart);
+  const dispatch = useDispatch();
+
+  const handleClearCart = (e) => {
+    e.preventDefault();
+    dispatch(clearCart());
+  };
 
   return (
     <div className="ml-4 mt-2 md:text-xl">
@@ -38,18 +21,26 @@ function Cart() {
 
       <h2 className="mb-3 mt-8 text-xl font-semibold">Your cart, {username}</h2>
 
-      <ul className="mb-2 min-w-72 max-w-full divide-y divide-slate-600 sm:max-w-[90dvh]">
-        {cart.map((item) => (
-          <CartItem key={item.pizzaId} item={item} type="cart" />
-        ))}
-      </ul>
+      {cart.length > 0 ? (
+        <ul className="mb-2 max-w-full divide-y divide-slate-600">
+          {cart.map((item) => (
+            <CartItem key={item.pizzaId} item={item} type="cart" />
+          ))}
+        </ul>
+      ) : (
+        <p className="my-4">Your cart is empty, add something to it!</p>
+      )}
 
-      <div className="space-x-4">
-        <Button type="small" to="/order/new">
-          Order pizzas
-        </Button>
-        <Button type="secondary">Clear cart</Button>
-      </div>
+      {cart.length > 0 ? (
+        <div className="space-x-4">
+          <Button type="small" to="/order/new">
+            Order pizzas
+          </Button>
+          <Button onClick={(e) => handleClearCart(e)} type="secondary">
+            Clear cart
+          </Button>
+        </div>
+      ) : null}
     </div>
   );
 }

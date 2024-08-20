@@ -7,7 +7,7 @@ import {
   formatCurrency,
   formatDate,
 } from '../../utils/helpers';
-import CartItem from '../../ui/PizzaItem';
+import CartItem from '../../ui/CartItem';
 
 const order = {
   id: 'ABCDEF',

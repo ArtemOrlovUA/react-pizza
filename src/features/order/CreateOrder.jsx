@@ -151,7 +151,6 @@ export async function action({ request }) {
     cart: JSON.parse(data.cart),
     priority: data.priority === 'on',
   };
-  console.log(order);
 
   const errors = {};
   if (!isValidPhone(data.phone))

@@ -32,9 +32,9 @@ function CartItem({ item, type }) {
             pizzaId={pizzaId}
             currentQuantity={currentQuantity}
           ></UpdateItemQuantity>
-          <spam className="flex items-center">
+          <span className="flex items-center">
             <DeleteItem item={item}></DeleteItem>
-          </spam>
+          </span>
         </div>
       </li>
     );

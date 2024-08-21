@@ -1,18 +1,13 @@
 import { useState } from 'react';
-import {
-  Form,
-  redirect,
-  useActionData,
-  useNavigate,
-  useNavigation,
-} from 'react-router-dom';
+import { Form, redirect, useActionData, useNavigation } from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../ui/Button';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { clearCart, getCart, getTotalPrice } from '../cart/cartSlice';
 import EmptyCart from '../cart/EmptyCart';
 import store from '../../store';
 import { formatCurrency } from '../../utils/helpers';
+import { fetchAddress, getUserAddress } from '../user/userSlice';
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -22,9 +17,16 @@ const isValidPhone = (str) =>
 
 function CreateOrder() {
   const { state } = useNavigation();
-  const username = useSelector((state) => state.user.username);
+  const {
+    username,
+    status: adressStatus,
+    position,
+  } = useSelector((state) => state.user);
   const isSubmitting = state === 'submitting';
   const [withPriority, setWithPriority] = useState(false);
+  const dispatch = useDispatch();
+  const isLoadingAdress = adressStatus === 'loading';
+  const userAdress = useSelector(getUserAddress);
 
   const formErrors = useActionData();
 
@@ -45,8 +47,8 @@ function CreateOrder() {
       </h2>
 
       <Form method="POST" className="flex flex-col">
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
-          <label className="">First Name</label>
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="">Name: </label>
           <div>
             <input
               className="input hover:w-92 w-54 transition-all"
@@ -58,8 +60,8 @@ function CreateOrder() {
           </div>
         </div>
 
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
-          <label className="">Phone number</label>
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="">Phone number: </label>
           <div>
             <input className="input" type="tel" name="phone" required />
           </div>
@@ -68,12 +70,38 @@ function CreateOrder() {
           )}
         </div>
 
-        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-center">
-          <label className="">Address</label>
-          <div>
-            <input className="input" type="text" name="address" required />
+        <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+          <label className="">Address: </label>
+          <div className="flex items-center justify-center gap-x-4">
+            <input
+              className="mt-1 w-[15rem] rounded-full border p-2 transition-all focus:w-[17rem] focus:outline-none focus:ring focus:ring-yellow-300 sm:w-[26rem] sm:focus:w-[30rem]"
+              disabled={isLoadingAdress}
+              defaultValue={userAdress}
+              type="text"
+              name="address"
+              required
+            />
+            {!userAdress && (
+              <span className="">
+                <Button
+                  disabled={isLoadingAdress}
+                  type="small"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    dispatch(fetchAddress());
+                  }}
+                >
+                  auto
+                </Button>
+              </span>
+            )}
           </div>
         </div>
+        {adressStatus === 'error' && (
+          <p className="mx-2 my-2 rounded-md bg-red-400">
+            Please, allow geolocation to get your adress
+          </p>
+        )}
 
         <div className="mb-4 ml-2.5 flex items-center justify-center space-x-2 sm:ml-0">
           <input
@@ -96,7 +124,13 @@ function CreateOrder() {
             name="cart"
             value={JSON.stringify(cart)}
           ></input>
-          <Button type="primary" state={state}>
+          <input
+            className=""
+            type="hidden"
+            name="position"
+            value={position ? `${position.latitude},${position.longitude}` : ''}
+          ></input>
+          <Button disabled={isLoadingAdress} type="primary" state={state}>
             {isSubmitting
               ? 'Submitting...'
               : `Order for ${formatCurrency(endPrice)}`}

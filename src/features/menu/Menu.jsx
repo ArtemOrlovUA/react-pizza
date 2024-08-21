@@ -7,7 +7,7 @@ function Menu() {
   // console.log(menu);
 
   return (
-    <ul className="max-w-[360px] pl-1 sm:max-w-[100%] md:grid md:grid-cols-[1fr_1fr]">
+    <ul className="mt-2 max-w-[360px] pl-1 sm:max-w-[100%] md:grid md:grid-cols-[1fr_1fr]">
       {menu.map((pizza) => {
         return <MenuItem pizza={pizza} key={pizza.id} />;
       })}
